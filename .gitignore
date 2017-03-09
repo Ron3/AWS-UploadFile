@@ -94,5 +94,6 @@ ENV/
 # 忽略安装库
 Crypto
 pycrypto-2.4.1-py2.7.egg-info
-
+requests
+requests-2.13.0.dist-info
 
