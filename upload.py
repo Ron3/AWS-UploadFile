@@ -48,7 +48,7 @@ def upload_handler(event, context):
         global session, s3
         session = boto3.Session()
         s3 = session.resource('s3')
-        
+
     return json.dumps({"errMsg": "upload success", "sha1": "00000000"})
 
 
