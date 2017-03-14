@@ -5,11 +5,26 @@ Create On 2017/3/13
 @author: Ron2
 """
 
+
 import json
+import os
+import time
+import base64
 import traceback
+from twisted.internet import task
 from twisted.internet import reactor
 from twisted.web.resource import Resource
 from twisted.web.server import Site
+
+
+''' 暴2的错误数据的根目录 '''
+ERROR_DATA_DIR = "/data/bpsg/bs2_error_data"
+
+''' 心跳包 '''
+HTTP_REQUEST_TYPE_HEARTBEAT = 1001
+
+''' 暴2的错误存档 '''
+REQUEST_TYPE_ERROR_GAME_DATA = 1101
 
 
 class HttpResource(Resource, object):
@@ -34,7 +49,11 @@ class HttpResource(Resource, object):
             if requestType == None:
                 return
 
+            if requestType == HTTP_REQUEST_TYPE_HEARTBEAT:      # 心跳包
+                return
 
+            if requestType == REQUEST_TYPE_ERROR_GAME_DATA:     # 处理错误的存档
+                self._handleErrorGameData(dataDic)
 
         except:
             pass
@@ -52,6 +71,26 @@ class HttpResource(Resource, object):
         return json.dumps({"errMsg": "get"})
 
 
+    def _handleErrorGameData(self, dataDic):
+        """
+        处理错误的暴2存档
+        :param dataDic:                         原始HTTP数据
+        :return:
+        """
+        userName = dataDic.get("userName")
+        gameData = dataDic.get("gameData")
+        if userName == None or gameData == None:
+            return
+
+        gameData = base64.decodestring()
+
+        ''' gameData '''
+        fileName = userName + "_"
+        fileName += int(time.time())
+        fullPath = os.path.join(ERROR_DATA_DIR, fileName)
+        fileObj = open(fullPath, "wb")
+        fileObj.write(gameData)
+        fileObj.close()
 
 
 
@@ -80,8 +119,20 @@ class HttpServer(object):
             traceback.print_exc()
 
 
+def gameLoop():
+    """
+    循环
+    :return:
+    """
+    print str(time.time())
+
+
 if __name__ == "__main__":
     httpServer = HttpServer(8080)
     reactor.listenTCP(httpServer.port, Site(httpServer.root))
+
+    loop = task.LoopingCall(gameLoop)
+    loop.start(1)
+
     reactor.run()
 
