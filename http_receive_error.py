@@ -128,7 +128,7 @@ def gameLoop():
 
 
 if __name__ == "__main__":
-    httpServer = HttpServer(8080)
+    httpServer = HttpServer(7777)
     reactor.listenTCP(httpServer.port, Site(httpServer.root))
 
     loop = task.LoopingCall(gameLoop)
