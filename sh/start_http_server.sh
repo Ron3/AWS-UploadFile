@@ -6,6 +6,13 @@ source $HOME/.bash_profile
 workon bpsg
 
 cd ../
-python http_receive_error.py &
-ps -ef | grep http_receive_error.py
+
+if [ -f ../tmp/bs2Http.pid ]
+then
+    kill `cat ../tmp/bs2Http.pid`
+fi
+
+cd ../server
+twistd --pidfile=../tmp/bs2Http.pid bs2err --port 7777
+
 
