@@ -78,18 +78,18 @@ class HttpResource(Resource, object):
         :return:
         """
         userName = dataDic.get("userName")
-        gameData = dataDic.get("gameData")
-        if userName == None or gameData == None:
+        fileData = dataDic.get("fileData")
+        if userName == None or fileData == None:
             return
 
-        gameData = base64.decodestring()
+        fileData = base64.decodestring(fileData)
 
         ''' gameData '''
         fileName = userName + "_"
-        fileName += int(time.time())
+        fileName += str(int(time.time()))
         fullPath = os.path.join(ERROR_DATA_DIR, fileName)
         fileObj = open(fullPath, "wb")
-        fileObj.write(gameData)
+        fileObj.write(fileData)
         fileObj.close()
 
 
