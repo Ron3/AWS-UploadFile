@@ -12,5 +12,5 @@ fi
 
 cd ../
 twistd --pidfile=./tmp/bs2Http.pid bs2err --port 7777
-
+ps -ef | grep bs2err
 
