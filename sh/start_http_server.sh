@@ -6,6 +6,6 @@ source $HOME/.bash_profile
 workon bpsg
 
 cd ../
-python http_receive_error &
-ps -ef | grep http_receive_error
+python http_receive_error.py &
+ps -ef | grep http_receive_error.py
 
