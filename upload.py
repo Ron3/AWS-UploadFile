@@ -13,6 +13,7 @@ import boto3
 import os
 import time
 import random
+import base64
 import traceback
 import httplib
 
@@ -79,8 +80,10 @@ def _post_to_ec2(userName, fileData):
         ''' 暴2的错误存档 '''
         REQUEST_TYPE_ERROR_GAME_DATA = 1101
 
+        fileData = base64.encodestring(fileData)
+
         httpConn = httplib.HTTPConnection(EC2_IP, EC_PORT)
-        httpConn.request("POST", "/error_data", json.dumps({"type": REQUEST_TYPE_ERROR_GAME_DATA, "key1": "RonRonRonRon1231"}))
+        httpConn.request("POST", "/error_data", json.dumps({"type": REQUEST_TYPE_ERROR_GAME_DATA, "userName": "Ron", "fileData": fileData}))
         response = httpConn.getresponse()
         data = response.read()
         httpConn.close()

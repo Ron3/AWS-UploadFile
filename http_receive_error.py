@@ -89,8 +89,8 @@ class HttpResource(Resource, object):
         fileName += str(int(time.time()))
         fullPath = os.path.join(ERROR_DATA_DIR, fileName)
 
-        print "fullPath ==> ", fullPath
-        print "fileData ==> ", fileData
+        # print "fullPath ==> ", fullPath
+        # print "fileData ==> ", fileData
 
         fileObj = open(fullPath, "wb")
         fileObj.write(fileData)
