@@ -56,7 +56,7 @@ class HttpResource(Resource, object):
                 self._handleErrorGameData(dataDic)
 
         except:
-            pass
+            traceback.print_exc()
         finally:
             return json.dumps({"errMsg": "success", "errCode": 0})
 
@@ -84,10 +84,14 @@ class HttpResource(Resource, object):
 
         fileData = base64.decodestring(fileData)
 
-        ''' gameData '''
+        ''' fileData '''
         fileName = userName + "_"
         fileName += str(int(time.time()))
         fullPath = os.path.join(ERROR_DATA_DIR, fileName)
+
+        print "fullPath ==> ", fullPath
+        print "fileData ==> ", fileData
+
         fileObj = open(fullPath, "wb")
         fileObj.write(fileData)
         fileObj.close()
